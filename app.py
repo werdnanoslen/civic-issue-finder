@@ -43,6 +43,27 @@ def embed():
     # Render index and pass in all of the organization names
     return render_template('embed.html', organization_names=names)
 
+@app.route('/geeks/civicissues/widget/featured')
+def featured_issues():
+    ''' Pull from a list of featured issues
+    '''
+    issues_url = 'http://codeforamerica.org/api/issues/featured?per_page=3'
+
+    # Get the actual issues from the API
+    issues_response = get(issues_url)
+    issues_json = issues_response.json()
+    issues = issues_json['objects']
+
+    if len(issues) < 3:
+        more = 3 - len(issues)
+        issues_url = 'http://codeforamerica.org/api/issues/labels/help wanted?per_page=' + str(more)
+        issues_response = get(issues_url)
+        issues_json = issues_response.json()
+        more_issues = issues_json['objects']
+        issues = issues + more_issues
+
+    return render_template('widget.html', issues=issues, labels='help wanted')
+
 
 @app.route('/geeks/civicissues/widget')
 def widget():
@@ -83,28 +104,6 @@ def widget():
     issues = issues_json['objects']
 
     return render_template('widget.html', issues=issues, labels=labels)
-
-@app.route('/geeks/civicissues/widget?labels=help%20wanted&number=3')
-def featured_issues():
-    ''' Pull from a list of featured issues
-    '''
-
-    issues_url = 'http://codeforamerica.org/api/issues/featured?per_page=3'
-
-    # Get the actual issues from the API
-    issues_response = get(issues_url)
-    issues_json = issues_response.json()
-    issues = issues_json['objects']
-
-    if len(issues) < 3:
-        more = 3 - len(issues)
-        issues_url = 'http://localhost:5000/api/issues/labels/help wanted?per_page=' + more
-        issues_response = get(issues_url)
-        issues_json = issues_response.json()
-        more_issues = issues_json['objects']
-        issues = issues + more_issues
-
-    return render_template('widget.html', issues=issues, labels='help wanted')
 
 if __name__ == "__main__":
     app.run(debug=True)
