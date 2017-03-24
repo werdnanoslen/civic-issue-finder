@@ -74,6 +74,7 @@ def widget():
     org_type = request.args.get('org_type')
     number = request.args.get('number')
     tracking_status = request.args.get('tracking')
+    query = request.args.get('body', None)
 
     # Build the url
     if org_name and labels:
@@ -86,7 +87,7 @@ def widget():
         issues_path_template = 'issues{?query*}'
 
     issues_url_template = urljoin(CFAPI_BASE, issues_path_template)
-    issues_url_kwargs = ('organization_type', org_type), ('per_page', number)
+    issues_url_kwargs = ('organization_type', org_type), ('per_page', number), ('body', query)
 
     url_args = dict(org_name=org_name, labels=labels,
                     query={k:v for (k, v) in issues_url_kwargs if v})
