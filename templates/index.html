@@ -41,13 +41,18 @@
                 <h1>The Civic Tech Issue Finder</h1>
                 <h2>Code for America Right Now</h2>
                 <p>These are open GitHub Issues labeled with
-                <span class="label">help wanted</span>
+                <span class="label" id="currentLabel">help wanted</span>
                 from across the civic technology movement. <a href="/geeks/civicissues/embed">Embed them</a> in your own site.</p>
                 <p class="field">
-                    <input id="project-search-bar" name="q" role="search" placeholder="map" />
-                    <button onclick="search()" class="button">
-                        <i class="icon-search"></i>
-                    </button>
+                    <label for="query">Search by term:</label>
+                    <input id="project-search-bar" name="query" role="search" placeholder="map" oninput="search()" />
+
+                    <label for="labels">Search by labels:</label>
+                    <select id="project-label-search" name="labels" role="search" onchange="search()" />
+                        <option>help wanted</option>
+                        <option>question</option>
+                        <option>bug</option>
+                    </select>
                 </p>
             </div>
             <iframe id="widget" src="/geeks/civicissues/widget?labels=help wanted&number=12" width="100%" height="900px" frameBorder="0" onLoad="resize();"> </iframe>

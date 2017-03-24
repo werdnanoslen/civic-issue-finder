@@ -5,7 +5,10 @@ function resize() {
 }
 
 function search() {
-    var url = "/geeks/civicissues/widget?labels=help wanted&number=12&body=";
+    var url = "/geeks/civicissues/widget?number=12&body=";
     var query = document.getElementById('project-search-bar').value;
-    document.getElementById('widget').src = url + query;
+    var labels = document.getElementById('project-label-search');
+    var label = labels.options[labels.selectedIndex].text;
+    document.getElementById('widget').src = url + query + "&labels=" + label;
+    document.getElementById('currentLabel').innerHTML = label;
 }
